@@ -1,0 +1,55 @@
+#!/bin/bash
+#------------------------------------------------------------------
+#Program name:	 Picks Up All Macs
+#Institution:    Federal Institute of Education, Science
+#                and Technology of Tocantins
+#Research Group: Research Group applied in Computer
+#                Networks and Systems
+#Leader:         Claudio de Castro Monteiro (CCM)
+#Developer:      Lucas Coutinho de Almeida
+#------------------------------------------------------------------
+#Description:	 Picks up all macs of computers from the network.
+#------------------------------------------------------------------
+#Examples for easier script execution:
+#                1-Change permission of file:
+#                $chmod +ax picks_up_all_macs or
+#                $chmod 775 picks_up_all_macs
+#
+#                2-Execution ways:
+#                $./picks_up_all_macs or
+#                $. picks_up_all_macs or
+#                $ bash picks_up_all_macs
+#------------------------------------------------------------------
+#Version:        v1.0 2018-06-18 Claudio de Castro Monteiro (CCM)
+#
+#                v1.1 2019-08-30 Lucas Coutinho de Almeida:
+#                Documentation, echo request and modification of 
+#		 variables.
+#------------------------------------------------------------------
+
+
+#Script:
+
+#Ask quantity of pcs on network
+echo "How many pc's have on network? "
+read quantity_pcs
+
+#It's first computer on the network
+pc=1
+while [ $pc -lt quantity_pcs ]
+do
+
+#	Print the folder
+	echo "/bin/get_mac 7703 a$pc"
+
+#	Runs script error_in_server.sh 
+	./error_in_server.sh "/bin/get_mac" a$pc
+
+#	pc had 1, after pc store pc+1
+	pc=`echo "$pc+1" | bc`
+
+#	Wait 10 seconds
+	sleep 10
+done
+
+

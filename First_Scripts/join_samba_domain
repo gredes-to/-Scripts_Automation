@@ -1,0 +1,54 @@
+#!/bin/bash
+#------------------------------------------------------------------
+#Program name:   Join Samba Domain           
+#Institution:    Federal Institute of Education, Science
+#                and Technology of Tocantins
+#Research Group: Applied Research Group in Computer
+#                Networks and Systems
+#Leader:         Claudio de Castro Monteiro (CCM)
+#Developer:      Lucas Coutinho de Almeida
+#------------------------------------------------------------------
+#Description:    Join in samba domain, create log file, restart
+#		 winbind and samba.                                                
+#------------------------------------------------------------------
+#Examples for easier script execution:
+#                1-Change permission of file:
+#                $chmod +ax join_samba_domain or
+#                $chmod 775 join_samba_domain
+#
+#                2-Execution ways:
+#                $./join_samba_domain. or
+#                $. join_samba_domain or
+#                $ bash join_samba_domain
+#------------------------------------------------------------------
+#Version:        v1.0 2018-06-18 Claudio de Castro Monteiro (CCM)
+#
+#                v1.1 2019-08-30 Lucas Coutinho de Almeida:
+#                Documentation, echo requests and modification 
+#		 of variables.
+#------------------------------------------------------------------
+
+#Script:
+
+#Request IP and samba server name
+echo "Enter IP of samba server: "
+read server_ip
+echo "Enter with samba server name: "
+read server_name
+
+#Line break and date is added in file login_samba_domain
+echo "\n" >> /var/log/login_samba_domain
+date >> /var/log/login_samba_domain
+
+#Join samba domain and create log file
+/usr/bin/expect -c "
+spawn net rpc join -S $server_ip -w $server_name -U root
+set timeout -1/
+#expect "*password:"
+#send 123456\r
+interact
+" >> /var/log/login_samba_domain 2>> /var/log/login_samba_domain_log
+
+#Restart samba domain and winbind
+/etc/init.d/samba-ad-dc restart
+/etc/init.d/winbind restart
